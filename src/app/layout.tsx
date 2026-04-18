@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "RentKav | Reliable Car & Motorcycle Rental",
     description:
       "Quality cars, transparent pricing, and reliable service in Surakarta. Book your vehicle today!",
-    url: "https://rentkav.com",
+    url: "https://rentkav.vercel.app",
     siteName: "RentKav",
     images: [
       {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     images: ["/hero.avif"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/kavdra-logo.avif",
     apple: "/kavdra-logo.avif",
   },
 };
