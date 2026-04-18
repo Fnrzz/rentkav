@@ -104,12 +104,12 @@ const Search = () => {
         )}
       </div>
 
-      <div className="hidden md:flex flex-row items-center justify-between gap-0 w-full">
+      <div className="hidden md:flex flex-row items-center justify-between gap-0 w-full ">
         {categories.map((cat, index) => (
           <Fragment key={cat.id}>
             <div
               onClick={() => handleCategoryChange(cat)}
-              className={`flex items-center gap-3 w-full justify-center cursor-pointer transition-opacity duration-300 ${
+              className={`relative flex items-center gap-3 w-full h-full justify-center cursor-pointer transition-opacity duration-300 pb-3 ${
                 activeCategory.id === cat.id
                   ? "opacity-100"
                   : "opacity-50 hover:opacity-100"
@@ -123,7 +123,16 @@ const Search = () => {
                 className="object-contain"
               />
               <h6 className="font-semibold text-sm">{cat.label}</h6>
+
+              <div
+                className={`absolute bottom-2 left-1/2 -translate-x-1/2 w-[70%] h-[2px] rounded-full bg-[#0A2540] ${
+                  activeCategory.id === cat.id
+                    ? "opacity-100"
+                    : "opacity-50 hover:opacity-100"
+                }`}
+              />
             </div>
+
             {index < categories.length - 1 && (
               <div className="w-[2px] h-10 bg-gray-200 rounded-full mx-4"></div>
             )}
@@ -140,11 +149,19 @@ const Search = () => {
         <input
           type="text"
           placeholder="Pick up date"
+          onFocus={(e) => (e.target.type = "date")}
+          onBlur={(e) => {
+            if (!e.target.value) e.target.type = "text";
+          }}
           className="w-full border border-gray-300 px-5 py-3 md:py-2 text-sm rounded-xl outline-none focus:border-[#C9A66B]"
         />
         <input
           type="text"
           placeholder="Drop off date"
+          onFocus={(e) => (e.target.type = "date")}
+          onBlur={(e) => {
+            if (!e.target.value) e.target.type = "text";
+          }}
           className="w-full border border-gray-300 px-5 py-3 md:py-2 text-sm rounded-xl outline-none focus:border-[#C9A66B]"
         />
         <button className="w-full bg-[#C9A66B] hover:bg-[#b08e55] px-6 py-3 md:py-2 transition-colors rounded-xl text-white font-semibold shadow-md">
