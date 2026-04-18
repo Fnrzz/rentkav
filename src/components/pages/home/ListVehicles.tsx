@@ -6,17 +6,16 @@ import { useState } from "react";
 import { vehicleData, Vehicle } from "@/lib/dummyData";
 import { useSearchParams } from "next/navigation";
 import VehicleModal from "./VehicleModal";
+import { motion } from "framer-motion";
 
 const ListVehicles = () => {
   const searchParams = useSearchParams();
-
   const currentCategory = searchParams.get("category") || "MPV";
 
   const [showAll, setShowAll] = useState(false);
-
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
-
   const [prevCategory, setPrevCategory] = useState(currentCategory);
+
   if (currentCategory !== prevCategory) {
     setPrevCategory(currentCategory);
     setShowAll(false);
@@ -36,13 +35,19 @@ const ListVehicles = () => {
   };
 
   return (
-    <section className="flex flex-col gap-6 py-10">
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-[#0A2540] mb-6 ">
+    <section className="flex flex-col gap-6 py-10 overflow-hidden">
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-2xl md:text-3xl font-bold text-center text-[#0A2540] mb-6 "
+      >
         Featured {getTitleLabel()}
-      </h2>
+      </motion.h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {displayedVehicles.map((car) => {
+        {displayedVehicles.map((car, index) => {
           const isAvailable = car.isAvailable;
           const cardBg = isAvailable ? "bg-[#FAF7F2]" : "bg-[#F3F4F6]";
           const badgeBg = isAvailable ? "bg-[#10A37F]" : "bg-[#FADBD8]";
@@ -60,9 +65,13 @@ const ListVehicles = () => {
             : "bg-gray-500 text-white cursor-not-allowed opacity-80";
 
           return (
-            <div
+            <motion.div
               key={car.id}
-              className={`w-full flex flex-col items-center p-3 md:p-5 rounded-xl md:rounded-2xl shadow-sm border border-gray-100 relative pt-8 md:pt-8 mt-4 ${cardBg}`}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: (index % 4) * 0.15 }}
+              className={`w-full flex flex-col items-center p-3 md:p-5 rounded-xl md:rounded-2xl shadow-sm border border-gray-100 relative pt-8 md:pt-8 mt-4 transition-transform hover:-translate-y-1 hover:shadow-md ${cardBg}`}
             >
               <div
                 className={`absolute -top-3 md:-top-3 px-2 md:px-4 py-1 border-2 rounded-full ${badgeBg} ${badgeBorder} shadow-sm z-10`}
@@ -129,7 +138,6 @@ const ListVehicles = () => {
               </div>
 
               <div className="w-full flex flex-col gap-2 mt-auto">
-                {/* UBAH Link menjadi Button untuk memicu Modal */}
                 <button
                   onClick={() => setSelectedVehicle(car)}
                   className={`w-full text-center text-xs md:text-sm p-2 md:p-3 rounded-lg md:rounded-xl border-2 transition-colors font-bold ${btnMoreInfo}`}
@@ -138,7 +146,7 @@ const ListVehicles = () => {
                 </button>
                 {isAvailable ? (
                   <Link
-                    href={`/booking/${car.id}`} // Anda bisa ganti link booking
+                    href={`/booking/${car.id}`}
                     className={`w-full text-center text-xs md:text-sm p-2 md:p-3 rounded-lg md:rounded-xl transition-colors font-bold ${btnBookNow}`}
                   >
                     Book Now
@@ -152,20 +160,25 @@ const ListVehicles = () => {
                   </button>
                 )}
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
 
       {filteredVehicles.length > 4 && (
-        <div className="flex justify-center mt-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="flex justify-center mt-6"
+        >
           <button
             onClick={() => setShowAll(!showAll)}
             className="px-6 md:px-8 py-2.5 md:py-3 text-sm md:text-base rounded-xl border-2 border-[#C9A66B] text-[#0A2540] font-bold hover:bg-[#C9A66B] hover:text-white transition-colors"
           >
             {showAll ? "Show Less" : `Browse All ${getTitleLabel()}`}
           </button>
-        </div>
+        </motion.div>
       )}
 
       <VehicleModal
